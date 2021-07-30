@@ -1,0 +1,41 @@
+Arguments: 
+  /Users/joeandrews/.nvm/versions/node/v12.13.0/bin/node /Users/joeandrews/.nvm/versions/node/v12.13.0/bin/yarn add @ethersproject
+
+PATH: 
+  /Users/joeandrews/.yarn/bin:/Users/joeandrews/.config/yarn/global/node_modules/.bin:/Users/joeandrews/.nvm/versions/node/v12.13.0/bin:/Users/joeandrews/.nvm/versions/node/v12.13.0/bin:/Users/joeandrews/.nvm/versions/node/v12.13.0/bin:/usr/local/Cellar/zplug/2.4.2/repos/zplug/zplug/bin:/usr/local/opt/zplug/bin:/Users/joeandrews/.dotfiles/bin:/usr/local/sbin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/joeandrews/.yarn/bin:/Users/joeandrews/.config/yarn/global/node_modules/.bin:/Users/joeandrews/.nvm/versions/node/v12.13.0/bin:/Users/joeandrews/.cargo/bin:/usr/local/opt/fzf/bin
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  12.13.0
+
+Platform: 
+  darwin x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/@ethersproject: Request "https://registry.yarnpkg.com/@ethersproject" returned a 405
+      at Request.params.callback [as _callback] (/Users/joeandrews/.nvm/versions/node/v12.13.0/lib/node_modules/yarn/lib/cli.js:66996:18)
+      at Request.self.callback (/Users/joeandrews/.nvm/versions/node/v12.13.0/lib/node_modules/yarn/lib/cli.js:140748:22)
+      at Request.emit (events.js:210:5)
+      at Request.<anonymous> (/Users/joeandrews/.nvm/versions/node/v12.13.0/lib/node_modules/yarn/lib/cli.js:141720:10)
+      at Request.emit (events.js:210:5)
+      at IncomingMessage.<anonymous> (/Users/joeandrews/.nvm/versions/node/v12.13.0/lib/node_modules/yarn/lib/cli.js:141642:12)
+      at Object.onceWrapper (events.js:299:28)
+      at IncomingMessage.emit (events.js:215:7)
+      at endReadableNT (_stream_readable.js:1183:12)
+      at processTicksAndRejections (internal/process/task_queues.js:80:21)
+
+npm manifest: 
+  {
+    "name": "hackathon",
+    "version": "1.0.0",
+    "main": "index.js",
+    "license": "MIT"
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
