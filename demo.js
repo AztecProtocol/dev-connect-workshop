@@ -16,7 +16,7 @@ const ETHEREUM_HOST =
   'https://goerli.infura.io/v3/6a04b7c89c5b421faefde663f787aa35';
 
 const AZTEC_PRIVATE_KEY = Buffer.from(
-  '66ea0d41eb3a426e587a946f7af5e1a75bb32896c89e9a6c1339b9646bfedd0d',
+  '66ea0d41eb3a426e587a946f7af5e1f75bb32896c89e9a6c1339b9646bfedd0d',
   'hex'
 );
 
@@ -113,7 +113,6 @@ const init = async () => {
     debug: true,
     minConfirmationEHW: 3,
   });
-  mv;
   await sdk.init();
   await sdk.awaitSynchronised();
   const user = await sdk.addUser(AZTEC_PRIVATE_KEY);
