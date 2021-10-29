@@ -1,5 +1,4 @@
 const {
-  ,
   AssetId,
   BridgeId,
   createWalletSdk,
@@ -16,15 +15,15 @@ const ROLLUP_HOST = 'https://api.aztec.network/falafel-defi-bridge';
 const ETHEREUM_HOST =
   'https://goerli.infura.io/v3/6a04b7c89c5b421faefde663f787aa35';
 
-// const AZTEC_PRIVATE_KEY = Buffer.from(
-//   '66ea0d41eb3a426e587a946f7af5e1a75bb32896c89e9a6c1339b9646bfedd0d',
-//   'hex'
-// );
+const AZTEC_PRIVATE_KEY = Buffer.from(
+  '66ea0d41eb3a426e587a946f7af5e1a75bb32896c89e9a6c1339b9646bfedd0d',
+  'hex'
+);
 
-const AZTEC_PRIVATE_KEY = randomBytes(32); // STORE THIS as hex
+// const AZTEC_PRIVATE_KEY = randomBytes(32); // STORE THIS as hex
 let userId;
-const ETHEREUM_ADDRESS = 'YOUR ADDRESS';
-const ETHEREUM_PRIVATE_KEY = 'YOUR PRIVATE KEY';
+const ETHEREUM_ADDRESS = '0x66a4693b6B3158099D6A284b0F1DE8b747cde256';
+const ETHEREUM_PRIVATE_KEY = process.env.PRIVATE_KEY;
 
 const ethersProvider = new JsonRpcProvider(ETHEREUM_HOST);
 const ethereumProvider = new EthersAdapter(ethersProvider);
@@ -35,6 +34,7 @@ const shield = async () => {
   const assetId = AssetId.ETH;
   const value = sdk.toBaseUnits(assetId, '0.2');
   const txFee = await sdk.getFee(assetId, TxType.DEPOSIT);
+  console.log('Lets get started by depositing 0.2 ETH To Aztec \n \n');
 
   const signer = sdk.createSchnorrSigner(AZTEC_PRIVATE_KEY);
   const depositor = EthAddress.fromString(ETHEREUM_ADDRESS);
@@ -52,21 +52,26 @@ const shield = async () => {
   await sdk.depositFundsToContract(assetId, depositor, value + txFee);
 
   const txHash = await sdk.sendProof(proofOutput, signature);
+  console.log('Shielded 0.2 ETH :) Now you cant see my actions \n \n');
+  console.log('Waiting for transaction to settle \n \n');
+
   await sdk.awaitSettlement(txHash, 10000);
 };
 const defiInteraction = async () => {
-  const defiBridge = EthAddress.fromString(
-    'YOUR BRIDGE CONTRACT'
-  );
-
   // const defiBridge = EthAddress.fromString(
-  //   '0xC4528eDC0F2CaeA2b9c65D05aa9A460891C5f2d4' // uniswap bridge
+  //   'YOUR BRIDGE CONTRACT'
   // );
+
+  const defiBridge = EthAddress.fromString(
+    '0xC4528eDC0F2CaeA2b9c65D05aa9A460891C5f2d4' // uniswap bridge
+  );
 
   const inputAssetId = AssetId.ETH;
   const outputAssetIdA = AssetId.DAI;
 
   const outputAssetIdB = 0;
+
+  console.log('Lets buy DAI, privately of course.... \n');
 
   const bridgeId = new BridgeId(
     defiBridge,
@@ -77,7 +82,7 @@ const defiInteraction = async () => {
   );
   const txFee = await sdk.getFee(inputAssetId, TxType.DEFI_DEPOSIT);
 
-  const depositValue = sdk.toBaseUnits(inputAssetId, '0.1');
+  const depositValue = sdk.toBaseUnits(inputAssetId, '0.04');
   const initialBalance = sdk.getBalance(inputAssetId, userId);
 
   const signer = sdk.createSchnorrSigner(AZTEC_PRIVATE_KEY);
@@ -91,8 +96,10 @@ const defiInteraction = async () => {
   );
 
   const txHash = await sdk.sendProof(proofOutput);
+  console.log('Waiting for transaction to settle \n \n');
 
   await sdk.awaitSettlement(txHash, 10000);
+  console.log('Yay we just traded ETH for Dai privately\n');
 
   const defiTxs = await sdk.getDefiTxs(userId);
 };
@@ -101,12 +108,12 @@ const init = async () => {
   sdk = await createWalletSdk(walletProvider, ROLLUP_HOST, {
     syncInstances: false,
     saveProvingKey: false,
+    minConfirmation: 3,
     clearDb: true,
-    dbPath: ':memory:',
-    minConfirmation: 1,
     debug: true,
-    minConfirmationEHW: 1,
+    minConfirmationEHW: 3,
   });
+  mv;
   await sdk.init();
   await sdk.awaitSynchronised();
   const user = await sdk.addUser(AZTEC_PRIVATE_KEY);

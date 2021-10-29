@@ -34,7 +34,7 @@
     ethers "5.0.29"
     typescript "^3.5.3"
 
-"@aztec/sdk@^2.1.2":
+"@aztec/sdk@2.1.2":
   version "2.1.2"
   resolved "https://registry.yarnpkg.com/@aztec/sdk/-/sdk-2.1.2.tgz#82f8d07d84b484906f7daf845cb531ad1e18299b"
   integrity sha512-PFRJhQrPVwnK80Mb+XeCA3gcthFwwEQ+dGxFreH4eCyCrKQOKqm8qN8I5Qi6mcvjzDTOBfv0SAIFbOHZc8Oz0w==
