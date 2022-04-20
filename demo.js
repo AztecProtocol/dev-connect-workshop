@@ -5,6 +5,7 @@ const {
   EthersAdapter,
   TxSettlementTime,
   DefiSettlementTime,
+  AztecSdk,
 } = require("@aztec/sdk");
 const { JsonRpcProvider } = require("@ethersproject/providers");
 const ethers = require("ethers");
@@ -16,7 +17,7 @@ const ROLLUP_HOST = "https://api.aztec.network/aztec-connect-dev/falafel";
 const ETHEREUM_HOST = "https://mainnet-fork.aztec.network";
 
 const AZTEC_PRIVATE_KEY = Buffer.from(
-  "66ea0d41eb3a426e587a946f7af5e1f75bb32896c89e9a6c1339b9646bfedd0d",
+  "66ea0d41eb3a426e587a946f7af5e1f75bb32896c89e9a6c1339b9646bfeda0d",
   "hex"
 );
 
@@ -46,7 +47,7 @@ const shield = async (l1Depositor, aztecUser) => {
   // Last deposit pays for instant rollup to flush.
   const fee = depositFees[TxSettlementTime.NEXT_ROLLUP];
   const controller = sdk.createDepositController(
-    aztecUser,
+    aztecUser.id,
     signer,
     shieldValue,
     fee,
@@ -68,13 +69,20 @@ const defiInteraction = async (aztecUser) => {
     wstETHAssetId
   );
   const ethToWstETHFees = await sdk.getDefiFees(ethToWstETHBridge);
-  const fee = ethToWstETHFees[DefiSettlementTime.NEXT_ROLLUP];
+  const fee = ethToWstETHFees[DefiSettlementTime.DEADLINE];
+  const balance = await sdk.getMaxSpendableValue(ethAssetId, aztecUser.id);
   const defiValue = sdk.toBaseUnits(0, "0.1");
+
+  debug("balance", balance, defiValue);
+
+  if (balance < defiValue) {
+    throw new Error("no balance :(");
+  }
 
   console.log("Lets stake ETH on the beacon chan, privately of course.... \n");
   const signer = await sdk.createSchnorrSigner(AZTEC_PRIVATE_KEY);
   const controller = sdk.createDefiController(
-    aztecUser,
+    aztecUser.id,
     signer,
     ethToWstETHBridge,
     defiValue,
@@ -89,7 +97,7 @@ const defiInteraction = async (aztecUser) => {
   debug("waiting for claim to settle...");
   await controller.awaitSettlement();
 
-  const [defiTx] = await sdk.getDefiTxs(aztecUser);
+  const [defiTx] = await sdk.getDefiTxs(aztecUser.id);
   console.log("success", defiTx);
 };
 
@@ -107,8 +115,8 @@ const init = async () => {
   const user = await sdk.addUser(AZTEC_PRIVATE_KEY);
   userId = user.id;
 
-  await shield(ETHEREUM_ADDRESS, userId);
-  await defiInteraction(userId);
+  await shield(ETHEREUM_ADDRESS, user);
+  await defiInteraction(user);
 };
 
 init();
